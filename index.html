@@ -4,22 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
-  <title>index.html</title>
+  <title>Device Info</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ua-parser-js/dist/ua-parser.min.js"></script>
 </head>
 <body>
 
-<h1>Device Info</h1>
+<h1>Device Info by.Kang Seok-min</h1>
 <div id="output">
 
 </div>
 
 <script>
   const uap = new UAParser();
-  console.log(uap.getCPU());
-  
   const data = uap.getResult();
   
   $(function () {
@@ -41,7 +39,6 @@
             if (typeof value != 'function') {
               // console.log(key, value);
               if (typeof value == 'string' || typeof value == 'undefined') {
-                console.log(typeof value);
                 $wrap.append(`<div><strong>${key}</strong> : ${value}</div>`);
               }
             }
