@@ -14,7 +14,31 @@
 </head>
 <body>
 
-<h1>Device Info by.Kang Seok-min</h1>
+<h1>Device Info by.강석민</h1>
+<h2>Width x Height</h2>
+<div>
+  <span>
+    <script>
+      const $width = $(document.currentScript.parentElement);
+      (function repeat_callback() {
+        $width.text(window.innerWidth);
+        requestAnimationFrame(repeat_callback);
+      })();
+    </script>
+  </span>
+  <span>x</span>
+  <span>
+    <script>
+      const $height = $(document.currentScript.parentElement);
+      (function repeat_callback() {
+        $height.text(window.innerHeight);
+        requestAnimationFrame(repeat_callback);
+      })();
+    </script>
+  </span>
+</div>
+
+
 <div id="output">
 
 </div>
