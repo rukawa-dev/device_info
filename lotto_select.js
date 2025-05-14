@@ -22,21 +22,6 @@ function getRandomLottoNumbers(Data) {
     const step4 = STEP_4(result_num);
     const step5 = STEP_5(result_num);
     
-    if (step1) console.log(`STEP_1 통과: [${result_num.join(', ')}]`);
-    else console.log(`STEP_1 실패(중복): [${result_num.join(', ')}]`);
-    
-    if (step2) console.log(`STEP_2 통과: 합=${result_num.reduce((a, b) => a + b, 0)}`);
-    else console.log(`STEP_2 실패(합이 허용 범위 벗어남): 합=${result_num.reduce((a, b) => a + b, 0)}`);
-    
-    if (step4) console.log(`STEP_4 통과: 홀짝 비율 만족`);
-    else console.log(`STEP_4 실패: 홀짝 비율 불만족`);
-    
-    if (step5) console.log(`STEP_5 통과: 연속번호 조건 만족`);
-    else console.log(`STEP_5 실패: 연속번호 3개 이상`);
-    
-    if (step1 && step2 && step4 && step5) {
-      console.log(`추천번호 생성 완료 (시도 횟수: ${tryCount})`);
-    }
   } while (
     !STEP_1(Data, result_num) ||
     !STEP_2(Data, result_num) ||
@@ -78,13 +63,11 @@ function STEP_2(Data, candidate) {
     }
     Data._minSum = minSum;
     Data._maxSum = maxSum;
-    console.log(`[STEP_2] 최소합: ${minSum}, 최대합: ${maxSum}`);
   }
   const sum = candidate.reduce((a, b) => a + b, 0);
   const range = (Data._maxSum - Data._minSum) / 4;
   const lower = Data._minSum + range;
   const upper = Data._maxSum - range;
-  console.log(`[STEP_2] 추천번호 합: ${sum}, 허용범위: ${lower} ~ ${upper}`);
   return sum >= lower && sum <= upper;
 }
 
@@ -115,13 +98,6 @@ function STEP_3(Data, candidate) {
     if (!appeared.has(n)) missed.push(n);
   }
   
-  // 콘솔에 출력
-  if (missed.length === 0) {
-    console.log("[STEP_3] 6개월 이상 출현하지 않은 번호 없음");
-  } else {
-    console.log(`[STEP_3] 6개월 이상 미출현 번호: ${missed.join(', ')}`);
-  }
-  
   // 추천번호에 반드시 1개 이상 포함돼야 함
   const hasMissed = candidate.some(n => missed.includes(n));
   return hasMissed;
@@ -136,7 +112,6 @@ function STEP_4(candidate) {
     if (num % 2 !== 0) oddCount++;
   }
   const evenCount = candidate.length - oddCount;
-  console.log(`[STEP_4] 홀수 ${oddCount}개, 짝수 ${evenCount}개`);
   return (
     (oddCount === 3 && evenCount === 3) ||
     (oddCount === 2 && evenCount === 4) ||
@@ -158,7 +133,6 @@ function STEP_5(candidate) {
       currentSeq = 1;
     }
   }
-  console.log(`[STEP_5] 최대 연속 개수: ${maxSeq}`);
   return maxSeq <= 2;
 }
 
@@ -185,4 +159,47 @@ function renderRecommend(Data) {
     tbody.appendChild(tr);
   }
 }
+
+/**
+ * 추천 번호 세트가 n번 중복될 때까지 생성 후 단일 세트 표시
+ */
+function renderRecommendWithDupCheck(Data) {
+  const DUP_TARGET = 8; // 중복 횟수 설정
+  const tbody = document.querySelector('#result_table tbody');
+  tbody.innerHTML = ''; // 기존 행 삭제
+  
+  const countMap = new Map();
+  let finalSet = null;
+  let attemptCount = 0; // 시도 횟수 카운트
+  
+  while (true) {
+    attemptCount++;
+    const recommend = getRandomLottoNumbers(Data);
+    const key = recommend.join(',');
+    const currentCount = (countMap.get(key) || 0) + 1;
+    countMap.set(key, currentCount);
+    
+    // 2번째 이상 중복될 때마다 콘솔 출력
+    /*if (currentCount >= 2) {
+      console.log(`[${key}] / ${currentCount}`);
+    }*/
+    
+    if (currentCount === DUP_TARGET) {
+      finalSet = recommend;
+      break;
+    }
+  }
+  
+  console.log(`총 ${attemptCount}개의 번호 세트를 생성하여 ${DUP_TARGET}번 중복된 번호를 찾았습니다.`);
+  
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>최종추천</td>
+    <td>-</td>
+    ${finalSet.map(num => `<td>${num}</td>`).join('')}
+  `;
+  tbody.appendChild(tr);
+}
+
+
 

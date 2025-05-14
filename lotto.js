@@ -32,7 +32,8 @@ function loadLottoData() {
     // 결과 확인
     renderTable();
     
-    renderRecommend(Data);
+    //renderRecommend(Data);
+    renderRecommendWithDupCheck(Data);
   };
   xhr.send();
 }

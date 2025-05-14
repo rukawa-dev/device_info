@@ -1,5 +1,15 @@
 {
-  "dependencies": {
-    "five-server": "^0.4.3"
-  }
+  "dependencies":{
+    "five-server":"^0.4.4"
+  },
+  "name":"device_info",
+  "version":"1.0.0",
+  "main":"lotto.js",
+  "scripts":{
+    "dev":"five-server",
+    "test":"echo \"Error: no test specified\" && exit 1"
+  },
+  "author":"",
+  "license":"ISC",
+  "description":""
 }
