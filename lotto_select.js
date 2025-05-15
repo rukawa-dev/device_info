@@ -119,6 +119,16 @@ function STEP_4(candidate) {
   return maxSeq <= 2;
 }
 
+// 번호에 따라 클래스명 결정 함수
+function getBallClass(num) {
+  if (num >= 1 && num <= 10) return 'ball1';
+  if (num >= 11 && num <= 20) return 'ball2';
+  if (num >= 21 && num <= 30) return 'ball3';
+  if (num >= 31 && num <= 40) return 'ball4';
+  if (num >= 41 && num <= 50) return 'ball5';
+  return '';
+}
+
 /**
  * 추천 번호 세트가 n번 중복될 때까지 생성 후 단일 세트 표시
  */
@@ -157,8 +167,18 @@ function renderRecommendWithDupCheck(Data) {
       // 결과 표시
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <th>최종추천</th>
-        <td>${finalSet.map(num => `${num}`).join(',')}</td>
+        <th style="width:50px;">최종 추천</th>
+        <td>
+          <span class="number-circle ${getBallClass(finalSet[0])}">${finalSet[0]}</span>
+          <span class="number-circle ${getBallClass(finalSet[1])}">${finalSet[1]}</span>
+          <span class="number-circle ${getBallClass(finalSet[2])}">${finalSet[2]}</span>
+          <span class="number-circle ${getBallClass(finalSet[3])}">${finalSet[3]}</span>
+          <span class="number-circle ${getBallClass(finalSet[4])}">${finalSet[4]}</span>
+          <span class="number-circle ${getBallClass(finalSet[5])}">${finalSet[5]}</span>
+        </td>
+        <td>
+          <input type="text" value="${finalSet.join(',')}" onclick="this.select()" style="outline:none; border:none; text-align:center; font-size:inherit;"/>
+        </td>
       `;
       tbody.appendChild(tr);
       console.log(`총 ${attemptCount}개의 번호 세트를 생성하여 ${DUP_TARGET}번 중복된 번호를 찾았습니다.`);
