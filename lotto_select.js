@@ -1,3 +1,5 @@
+const DUP_TARGET = 3; // 중복 횟수 설정
+
 /**
  * 1~45 사이의 중복 없는 6개 번호를 무작위로 뽑아 오름차순 정렬해서 반환
  * - STEP_1: 역대 당첨번호와 완전히 일치하지 않을 것
@@ -133,7 +135,6 @@ function getBallClass(num) {
  * 추천 번호 세트가 n번 중복될 때까지 생성 후 단일 세트 표시
  */
 function renderRecommendWithDupCheck(Data) {
-  const DUP_TARGET = 2; // 중복 횟수 설정
   const tbody = document.querySelector('#result_table tbody');
   tbody.innerHTML = ''; // 기존 행 삭제
   
