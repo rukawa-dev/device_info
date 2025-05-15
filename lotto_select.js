@@ -2,14 +2,21 @@
  * 1~45 사이의 중복 없는 6개 번호를 무작위로 뽑아 오름차순 정렬해서 반환
  * - STEP_1: 역대 당첨번호와 완전히 일치하지 않을 것
  * - STEP_2: 6개 번호의 합이 (최소합 + (최대합-최소합)/4) 이상 (최대합 - (최대합-최소합)/4) 이하일 것
- * - STEP_4: 홀수와 짝수의 비율이 3:3 또는 2:4 또는 4:2 일 것
- * - STEP_5: 연속되는 번호는 2개 이하일 것
+ * - STEP_3: 최근 6개월(26주) 미출현 번호가 1개 이상 포함될 것
+ * - STEP_3: 홀수와 짝수의 비율이 3:3 또는 2:4 또는 4:2 일 것
+ * - STEP_4: 연속되는 번호는 2개 이하일 것
  */
 function getRandomLottoNumbers(Data) {
   let result_num;
   let tryCount = 0;
+  let step1, step2, step3, step4; // 변수 선언 위치 변경
+  
   do {
     tryCount++;
+    
+    // 모든 STEP 클래스 초기화
+    $(`.step-text`).removeClass('on');
+    
     const numbers = Array.from({length: 45}, (_, i) => i + 1);
     for (let i = numbers.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -17,16 +24,24 @@ function getRandomLottoNumbers(Data) {
     }
     result_num = numbers.slice(0, 6).sort((a, b) => a - b);
     
-    const step1 = STEP_1(Data, result_num);
-    const step2 = STEP_2(Data, result_num);
-    const step4 = STEP_4(result_num);
-    const step5 = STEP_5(result_num);
+    // 각 STEP 검사 및 클래스 추가
+    step1 = STEP_1(Data, result_num);
+    if (step1) document.getElementById('step-1').classList.add('on');
+    
+    step2 = STEP_2(Data, result_num);
+    if (step2) document.getElementById('step-2').classList.add('on');
+    
+    step3 = STEP_3(result_num);
+    if (step3) document.getElementById('step-3').classList.add('on');
+    
+    step4 = STEP_4(result_num);
+    if (step4) document.getElementById('step-4').classList.add('on');
     
   } while (
-    !STEP_1(Data, result_num) ||
-    !STEP_2(Data, result_num) ||
-    !STEP_4(result_num) ||
-    !STEP_5(result_num)
+    !step1 ||
+    !step2 ||
+    !step3 ||
+    !step4
     );
   return result_num;
 }
@@ -72,41 +87,9 @@ function STEP_2(Data, candidate) {
 }
 
 /**
- * STEP_3: 최근 6개월(26주) 이상 한 번도 출현하지 않은 번호가
- * 추천번호에 1개 이상 포함되어야 true 반환
- * 콘솔에 미출현 번호도 출력!
- * @param {Array} Data - 역대 당첨번호 배열 (최신이 맨 앞)
- * @param {number[]} candidate - 추천 6개 번호
- * @returns {boolean}
+ * STEP_3: 홀수와 짝수의 비율이 3:3 또는 2:4 또는 4:2 인지 확인
  */
-function STEP_3(Data, candidate) {
-  if (!Array.isArray(Data) || Data.length === 0) return true;
-  
-  // 최근 26주(6개월) 당첨번호 집합 만들기 (최신이 맨 앞이라고 가정)
-  const recentWeeks = 26;
-  const appeared = new Set();
-  for (let i = 0; i < Math.min(recentWeeks, Data.length); i++) {
-    const item = Data[i];
-    if (item.select && item.select.length === 6) {
-      item.select.forEach(n => appeared.add(Number(n)));
-    }
-  }
-  
-  // 1~45 중 최근 6개월간 한 번도 안 나온 번호 리스트
-  const missed = [];
-  for (let n = 1; n <= 45; n++) {
-    if (!appeared.has(n)) missed.push(n);
-  }
-  
-  // 추천번호에 반드시 1개 이상 포함돼야 함
-  const hasMissed = candidate.some(n => missed.includes(n));
-  return hasMissed;
-}
-
-/**
- * STEP_4: 홀수와 짝수의 비율이 3:3 또는 2:4 또는 4:2 인지 확인
- */
-function STEP_4(candidate) {
+function STEP_3(candidate) {
   let oddCount = 0;
   for (const num of candidate) {
     if (num % 2 !== 0) oddCount++;
@@ -120,9 +103,9 @@ function STEP_4(candidate) {
 }
 
 /**
- * STEP_5: 연속되는 번호가 2개 이하일 때만 true 반환
+ * STEP_4: 연속되는 번호가 2개 이하일 때만 true 반환
  */
-function STEP_5(candidate) {
+function STEP_4(candidate) {
   let maxSeq = 1;
   let currentSeq = 1;
   for (let i = 1; i < candidate.length; i++) {
@@ -137,68 +120,55 @@ function STEP_5(candidate) {
 }
 
 /**
- * 추천번호 5세트를 생성해서 result_table에 모두 표시
- */
-function renderRecommend(Data) {
-  const tbody = document.querySelector('#result_table tbody');
-  tbody.innerHTML = ''; // 기존 행 삭제
-  
-  for (let i = 0; i < 5; i++) {
-    const recommend = getRandomLottoNumbers(Data);
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>추천${i + 1}</td>
-      <td>-</td>
-      <td>${recommend[0]}</td>
-      <td>${recommend[1]}</td>
-      <td>${recommend[2]}</td>
-      <td>${recommend[3]}</td>
-      <td>${recommend[4]}</td>
-      <td>${recommend[5]}</td>
-    `;
-    tbody.appendChild(tr);
-  }
-}
-
-/**
  * 추천 번호 세트가 n번 중복될 때까지 생성 후 단일 세트 표시
  */
 function renderRecommendWithDupCheck(Data) {
-  const DUP_TARGET = 1; // 중복 횟수 설정
+  const DUP_TARGET = 2; // 중복 횟수 설정
   const tbody = document.querySelector('#result_table tbody');
   tbody.innerHTML = ''; // 기존 행 삭제
   
   const countMap = new Map();
   let finalSet = null;
-  let attemptCount = 0; // 시도 횟수 카운트
+  let attemptCount = 0;
   
-  while (true) {
-    attemptCount++;
-    const recommend = getRandomLottoNumbers(Data);
-    const key = recommend.join(',');
-    const currentCount = (countMap.get(key) || 0) + 1;
-    countMap.set(key, currentCount);
-    
-    // 2번째 이상 중복될 때마다 콘솔 출력
-    /*if (currentCount >= 2) {
-      console.log(`[${key}] / ${currentCount}`);
-    }*/
-    
-    if (currentCount === DUP_TARGET) {
-      finalSet = recommend;
-      break;
+  // 비동기 루프 함수
+  function findDuplicateAsync() {
+    let found = false;
+    // 한 번에 100회씩 처리 (UI 멈춤 방지)
+    for (let i = 0; i < 10; i++) {
+      attemptCount++;
+      
+      // tryCount를 #try_cnt에 출력
+      const tryCntElem = document.getElementById('try_cnt');
+      if (tryCntElem) tryCntElem.textContent = attemptCount;
+      
+      const recommend = getRandomLottoNumbers(Data);
+      const key = recommend.join(',');
+      const currentCount = (countMap.get(key) || 0) + 1;
+      countMap.set(key, currentCount);
+      
+      if (currentCount === DUP_TARGET) {
+        finalSet = recommend;
+        found = true;
+        break;
+      }
+    }
+    if (found) {
+      // 결과 표시
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <th>최종추천</th>
+        <td>${finalSet.map(num => `${num}`).join(',')}</td>
+      `;
+      tbody.appendChild(tr);
+      console.log(`총 ${attemptCount}개의 번호 세트를 생성하여 ${DUP_TARGET}번 중복된 번호를 찾았습니다.`);
+    } else {
+      // 다음 batch를 비동기적으로 실행
+      setTimeout(findDuplicateAsync, 0);
     }
   }
   
-  console.log(`총 ${attemptCount}개의 번호 세트를 생성하여 ${DUP_TARGET}번 중복된 번호를 찾았습니다.`);
-  
-  const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <th>최종추천</th>
-    <td>${finalSet.map(num => `${num}`).join(',')}</td>
-  `;
-  tbody.appendChild(tr);
+  // 시작
+  findDuplicateAsync();
 }
-
-
 

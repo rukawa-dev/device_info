@@ -21,6 +21,7 @@
     }
     
     .list-98c294fe{
+      font-size:20px;
       display:flex;
       flex-direction:column;
       gap:5px;
@@ -33,15 +34,25 @@
         &:after{
           top:0px;
           left:0px;
-          display:inline-block;
+          display:none;
           content:': OK';
           z-index:0;
+        }
+      }
+      
+      > li.on{
+        color:green;
+        font-weight:700;
+        
+        &:after{
+          display:inline-block;
         }
       }
       
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="lotto.js"></script>
   <script src="lotto_select.js"></script>
 </head>
@@ -51,20 +62,20 @@
 
 <h2>추천 과정</h2>
 <ul class="list-98c294fe">
-  <li>
+  <li id="step-1" class="step-text">
     <div>조건1. 역대 당첨번호와 완전히 일치하지 않을 것</div>
   </li>
-  <li>
+  <li id="step-2" class="step-text">
     <div>조건2. 6개 번호의 합이 (최소합 + (최대합-최소합)/4) 이상 (최대합 - (최대합-최소합)/4) 이하일 것</div>
   </li>
-  <li>
+  <li id="step-3" class="step-text">
     <div>조건3. 홀수와 짝수의 비율이 3:3 또는 2:4 또는 4:2 일 것</div>
   </li>
-  <li>
+  <li id="step-4" class="step-text">
     <div>조건4. 연속되는 번호는 2개 이하일 것</div>
   </li>
-  <li>
-    <div>조건5. 적중 확률 3배 높이기</div>
+  <li id="step-5" class="step-text">
+    <div>조건5. 적중 확률 3배 높이기 / 가상 추첨 횟수 <span id="try_cnt"></span></div>
   </li>
 </ul>
 
