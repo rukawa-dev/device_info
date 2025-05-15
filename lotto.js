@@ -32,8 +32,10 @@ function loadLottoData() {
     // 결과 확인
     renderTable();
     
-    //renderRecommend(Data);
-    renderRecommendWithDupCheck(Data);
+    $(`#button-022d575b`).off(`click.43a74f74`).on(`click.43a74f74`, function (evt) {
+      console.clear();
+      renderRecommendWithDupCheck(Data);
+    });
   };
   xhr.send();
 }
