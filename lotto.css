@@ -46,6 +46,11 @@ th, td{
 }
 
 .list-98c294fe{
+  
+  input{
+    font-size:inherit;
+  }
+  
   font-size:20px;
   display:flex;
   flex-direction:column;

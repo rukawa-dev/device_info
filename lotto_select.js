@@ -1,9 +1,10 @@
 let tryCount = 0;
+const console_k = 100;
 const DUP_TARGET = 2; // 중복 횟수 설정
 
 function getRandomLottoNumbers(Data) {
   let result_num;
-  let step1, step2, step3, step4;
+  let step0, step1, step2, step3, step4;
   
   do {
     tryCount++;
@@ -17,29 +18,72 @@ function getRandomLottoNumbers(Data) {
     }
     result_num = numbers.slice(0, 6).sort((a, b) => a - b);
     
+    step0 = STEP_0(result_num);
+    if (step0.pass) document.getElementById('step-0').classList.add('on');
+    else {
+      if (tryCount % 100 == 0) console.clear();
+      console.log(`[탈락] ${step0.reason} → ${step0.numbers.join(', ')}`);
+    }
+    
     step1 = STEP_1(Data, result_num);
     if (step1.pass) document.getElementById('step-1').classList.add('on');
-    else console.log(`[탈락] ${step1.reason} → ${step1.numbers.join(', ')}`);
+    else {
+      if (tryCount % console_k == 0) console.clear();
+      console.log(`[탈락] ${step1.reason} → ${step1.numbers.join(', ')}`);
+    }
     
     step2 = STEP_2(Data, result_num);
     if (step2.pass) document.getElementById('step-2').classList.add('on');
-    else console.log(`[탈락] ${step2.reason} → ${step2.numbers.join(', ')}`);
+    else {
+      if (tryCount % console_k == 0) console.clear();
+      console.log(`[탈락] ${step2.reason} → ${step2.numbers.join(', ')}`);
+    }
     
     step3 = STEP_3(result_num);
     if (step3.pass) document.getElementById('step-3').classList.add('on');
-    else console.log(`[탈락] ${step3.reason} → ${step3.numbers.join(', ')}`);
+    else {
+      if (tryCount % console_k == 0) console.clear();
+      console.log(`[탈락] ${step3.reason} → ${step3.numbers.join(', ')}`);
+    }
     
     step4 = STEP_4(result_num);
     if (step4.pass) document.getElementById('step-4').classList.add('on');
-    else console.log(`[탈락] ${step4.reason} → ${step4.numbers.join(', ')}`);
+    else {
+      if (tryCount % console_k == 0) console.clear();
+      console.log(`[탈락] ${step4.reason} → ${step4.numbers.join(', ')}`);
+    }
     
   } while (
+    !step0.pass ||
     !step1.pass ||
     !step2.pass ||
     !step3.pass ||
     !step4.pass
     );
   return result_num;
+}
+
+function STEP_0(candidate) {
+  // #want-num에서 입력값 읽기
+  const wantStr = $('#want-num').val();
+  if (!wantStr) return {pass: true}; // 입력 없으면 통과
+  
+  // 입력값을 숫자 배열로 변환
+  const wantNums = wantStr.split(',')
+    .map(s => parseInt(s.trim(), 10))
+    .filter(n => !isNaN(n));
+  
+  // 모든 원하는 숫자가 candidate에 포함되어 있는지 확인
+  const allIncluded = wantNums.every(num => candidate.includes(num));
+  if (allIncluded) {
+    return {pass: true};
+  } else {
+    return {
+      pass: false,
+      reason: `STEP_0: 원하는 숫자(${wantNums.join(',')}) 미포함`,
+      numbers: candidate.slice()
+    };
+  }
 }
 
 function STEP_1(Data, candidate) {
@@ -153,7 +197,7 @@ function renderRecommendWithDupCheck(Data) {
       }
     }
     if (found) {
-      $(`#step-5`).addClass('on');
+      $(`#final-step`).addClass('on');
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <th style="width:50px;">최종 추천</th>

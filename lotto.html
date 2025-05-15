@@ -11,12 +11,21 @@
   <script src="lotto_select.js"></script>
 </head>
 <body>
-<h1>행운번호 추천</h1>
+<h1>행운번호 무료 나눔</h1>
+<ul>
+  <li>채팅창에 <strong style="color:red;">'번호생성'</strong> 이라고 말씀주시면 번호를 즉석으로 하나 만들어 드립니다.</li>
+  <li>아무것도 요구 하지 않습니다.</li>
+  <li>재미삼아 번호 받아가세요~</li>
+  <li>서로 덕담 한마디씩 해주시면 좋아요~</li>
+</ul>
 <button id="button-022d575b">
   <img src="럭키랜드.png" alt=""/>
 </button>
-<h2>추천 조건</h2>
+<h2>행운번호 조건</h2>
 <ul class="list-98c294fe">
+  <li id="step-0" class="step-text">
+    <div>조건0. 원하는 숫자 포함 <input id="want-num" type="text" value="" placeholder="ex) 1,2,3,4"/></div>
+  </li>
   <li id="step-1" class="step-text">
     <div>조건1. 역대 당첨번호와 완전히 일치하지 않을 것</div>
   </li>
@@ -29,8 +38,8 @@
   <li id="step-4" class="step-text">
     <div>조건4. 연속되는 번호는 2개 이하일 것</div>
   </li>
-  <li id="step-5" class="step-text">
-    <div>조건5. 적중 확률 높이기</div>
+  <li id="final-step" class="step-text">
+    <div>적중 확률 높이기 계산중...</div>
   </li>
 </ul>
 
