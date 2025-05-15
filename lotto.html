@@ -6,6 +6,7 @@
   <title>로또 데이터 AJAX 변환</title>
   <style>
     table{
+      text-align:center;
       display:table;
       table-layout:fixed;
       border-collapse:collapse;
@@ -14,39 +15,66 @@
     th, td{
       border:1px solid black;
     }
+    
+    #result_table{
+      font-size:30px;
+    }
+    
+    .list-98c294fe{
+      display:flex;
+      flex-direction:column;
+      gap:5px;
+      padding:0;
+      
+      > li{
+        display:flex;
+        gap:10px;
+        
+        &:after{
+          top:0px;
+          left:0px;
+          display:inline-block;
+          content:': OK';
+          z-index:0;
+        }
+      }
+      
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="lotto.js"></script>
   <script src="lotto_select.js"></script>
 </head>
 <body>
-<h2>AJAX로 엑셀 파일 → JS 배열 변환</h2>
+<h1>행운번호 추천</h1>
 <pre id="result"></pre>
 
-<h1>추천 번호</h1>
+<h2>추천 과정</h2>
+<ul class="list-98c294fe">
+  <li>
+    <div>조건1. 역대 당첨번호와 완전히 일치하지 않을 것</div>
+  </li>
+  <li>
+    <div>조건2. 6개 번호의 합이 (최소합 + (최대합-최소합)/4) 이상 (최대합 - (최대합-최소합)/4) 이하일 것</div>
+  </li>
+  <li>
+    <div>조건3. 홀수와 짝수의 비율이 3:3 또는 2:4 또는 4:2 일 것</div>
+  </li>
+  <li>
+    <div>조건4. 연속되는 번호는 2개 이하일 것</div>
+  </li>
+  <li>
+    <div>조건5. 적중 확률 3배 높이기</div>
+  </li>
+</ul>
+
+<hr/>
 <table id="result_table">
-  <thead>
-  <tr>
-    <th>회차</th>
-    <th>추첨일</th>
-    <th colspan="6">당첨번호</th>
-  </tr>
-  </thead>
   <tbody>
-  <tr>
-    <td id="attemptCount">no</td>
-    <td>date</td>
-    <td>1</td>
-    <td>2</td>
-    <td>3</td>
-    <td>4</td>
-    <td>5</td>
-    <td>6</td>
-  </tr>
   </tbody>
 </table>
-
-<h1>역대 당첨 번호</h1>
+<hr/>
+<h2>역대 당첨 번호</h2>
 <table id="history_table">
   <thead>
   <tr>

@@ -164,7 +164,7 @@ function renderRecommend(Data) {
  * 추천 번호 세트가 n번 중복될 때까지 생성 후 단일 세트 표시
  */
 function renderRecommendWithDupCheck(Data) {
-  const DUP_TARGET = 8; // 중복 횟수 설정
+  const DUP_TARGET = 1; // 중복 횟수 설정
   const tbody = document.querySelector('#result_table tbody');
   tbody.innerHTML = ''; // 기존 행 삭제
   
@@ -194,9 +194,8 @@ function renderRecommendWithDupCheck(Data) {
   
   const tr = document.createElement('tr');
   tr.innerHTML = `
-    <td>최종추천</td>
-    <td>-</td>
-    ${finalSet.map(num => `<td>${num}</td>`).join('')}
+    <th>최종추천</th>
+    <td>${finalSet.map(num => `${num}`).join(',')}</td>
   `;
   tbody.appendChild(tr);
 }
