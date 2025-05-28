@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
+  <script src="lt.js"></script>
+  <title>lt.html</title>
+  <style>
+    body{
+      font-family:"Noto Sans KR", "맑은 고딕", "Malgun Gothic", 돋움, Dotum, sans-serif;
+    }
+    
+    #output_number{
+      background-color:#333;
+      
+      margin-inline:auto;
+      width:560px;
+      height:315px;
+      
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      
+    }
+    
+    .number-circle{
+      width:70px;
+      height:70px;
+      font-size:32px;
+      border-radius:100%;
+      color:white;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:0rem;
+    }
+    .number-circle.ball1{
+      background:#FBC400;
+      text-shadow:0px 0px 3px rgba(73, 57, 0, .8)
+    }
+    .number-circle.ball2{
+      background:#69C8F2;
+      text-shadow:0px 0px 3px rgba(0, 49, 70, .8)
+    }
+    .number-circle.ball3{
+      background:#FF7272;
+      text-shadow:0px 0px 3px rgba(64, 0, 0, .8)
+    }
+    .number-circle.ball4{
+      background:#AAAAAA;
+      text-shadow:0px 0px 3px rgba(61, 61, 61, .8)
+    }
+    .number-circle.ball5{
+      background:#B0D840;
+      text-shadow:0px 0px 3px rgba(41, 56, 0, .8)
+    }
+    
+    .box-62b88b79{
+      margin-top:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:0rem;
+    }
+    
+    #button-e0594213{
+      font-size:30px;
+    }
+  </style>
+
+
+</head>
+<body>
+
+
+<div id="output_number">
+  <div class="number-circle"></div>
+  <div class="number-circle"></div>
+  <div class="number-circle"></div>
+  <div class="number-circle"></div>
+  <div class="number-circle"></div>
+  <div class="number-circle"></div>
+</div>
+
+<div class="box-62b88b79">
+  <button id="button-e0594213">
+    #output_number 를 이미지로 저장
+  </button>
+</div>
+
+</body>
+</html>
