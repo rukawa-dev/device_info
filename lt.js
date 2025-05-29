@@ -59,6 +59,11 @@ function init() {
     });
   });
   
+  // 새로 고침
+  $(`#button-fd77e1fe`).off(`click.1231a457`).on(`click.1231a457`, function (evt) {
+    window.location.reload();
+  });
+  
 }
 
 function getBallClass(num) {
