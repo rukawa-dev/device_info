@@ -1,5 +1,12 @@
 let LottoDataList;
 
+function convertLottoDataList(LottoDataList) {
+  return LottoDataList.map(item => {
+    // 객체에서 1, 2, 3, 4, 5, 6 키의 값을 뽑아서 배열로 만듦
+    return [item[1], item[2], item[3], item[4], item[5], item[6]];
+  });
+}
+
 function loadPrevDataList() {
   const url = "https://script.google.com/macros/s/AKfycbyZTCQXFblfO2zl7uBrFMChafBh_Q-dFbtI4mCVNw1E2SV-FMxvNct9JkaB_ivdaDnuYA/exec";
   
@@ -13,7 +20,7 @@ function loadPrevDataList() {
     timeout: 60 * 1000
     , success: function (response, status, xhr) {
       //console.log("AJAX success : " + url);
-      LottoDataList = response;
+      LottoDataList = convertLottoDataList(response);
       init();
     }, error: function (jqXHR, textStatus, errorThrown) {
       console.log("AJAX error : " + url);
@@ -30,7 +37,6 @@ loadPrevDataList();
 
 function init() {
   const numbers = step_2();
-  console.log(numbers);
   
   const circles = document.querySelectorAll('#output_number .number-circle');
   circles.forEach((circle, idx) => {
@@ -79,7 +85,7 @@ function getBallClass(num) {
  * 1이상 45이하의 무작위 숫자 6개를 겹치지 않게 뽑아줘.
  */
 function step_1() {
-  const number_arr = [];
+  let number_arr = [];
   while (number_arr.length < 6) {
     const num = Math.floor(Math.random() * 45) + 1; // 1~45
     if (!number_arr.includes(num)) {
